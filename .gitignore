@@ -14,3 +14,4 @@ bankMakeList
 gametank-2M.cfg
 imgui.ini
 result
+!src/cubicle_bins/*

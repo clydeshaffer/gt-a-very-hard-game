@@ -63,7 +63,7 @@ bin/$(TARGET): $(BANKS)
 
 $(info ASSETOBJS is $(ASSETOBJS))
 
-$(BANKS): $(ASSETOBJS) $(AOBJS) $(COBJS) $(LLIBS) gametank-2M.cfg
+$(BANKS): $(ASSETOBJS) $(AOBJS) $(COBJS) gametank-2M.cfg
 	@mkdir -p $(@D)
 	$(LN) $(LFLAGS) $(ASSETOBJS) $(AOBJS) $(COBJS) -o bin/$(TARGET) $(LLIBS)
 

@@ -10,7 +10,7 @@ const bankMakeListFileName = './bankMakeList';
 
 const dirInfo = fs.readdirSync(assetsDir).filter((p) => fs.statSync(assetsDir + '/' + p).isDirectory());
 
-const buildCfg = LinkerConfig.generateLinkerConfig(dirInfo, 1);
+const buildCfg = LinkerConfig.generateLinkerConfig(dirInfo, 2);
 
 fs.writeFileSync(linkerConfigFileName, buildCfg.linker);
 fs.writeFileSync(bankMakeListFileName, buildCfg.bankMakeList);
