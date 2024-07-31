@@ -25,11 +25,11 @@ void unpack_cubicle_graphics() {
 }
 
 void unpack_main_cubicle_music() {
-    inflatemem(&CubicleLoadedMusic, CubicleMainMusic);
+    //inflatemem(&CubicleLoadedMusic, CubicleMainMusic);
 }
 
 void unpack_victory_cubicle_music() {
-    inflatemem(&CubicleLoadedMusic, CubicleVictoryMusic);
+    //inflatemem(&CubicleLoadedMusic, CubicleVictoryMusic);
 }
 
 void unpack_title_tile_map() {

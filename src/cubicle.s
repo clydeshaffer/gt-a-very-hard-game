@@ -6,7 +6,7 @@
 .import _unpack_title_tile_map
 .import _unpack_main_tile_map
 .import _unpack_victory_tile_map
-.import _CubicleLoadedMap, _CubicleLoadedMusic
+.import _CubicleLoadedMap
 .export _CubicleMainMusic, _CubicleVictoryMusic, _CubicleSprites
 .export _CubicleMainMap, _CubicleTitleMap, _CubicleVictoryMap
 .export _CubicleReset, _CubicleACP
@@ -18,6 +18,7 @@ temp: .res 16
 
 gameobject: .res 16
 
+LoadedMusic: .res 2
 BGColor: .res 1
 SharedSpringState: .res 1
 HP_Remaining: .res 1
@@ -207,7 +208,11 @@ StartupWait:
 	STZ MusicEnvI_Ch3
 	STZ MusicEnvI_Ch4
 
-	JSR _unpack_main_cubicle_music
+	;JSR _unpack_main_cubicle_music
+	LDA #<_CubicleMainMusic
+	STA LoadedMusic
+	LDA #>_CubicleMainMusic
+	STA LoadedMusic+1
 	JSR LoadMusicWithoutInflate
 
     JSR _unpack_cubicle_acp
@@ -1222,23 +1227,29 @@ LoadMusicWithoutInflate:
 	;LByte HByte - song length
 	;LByte HByte - add to _CubicleLoadedMusic to get ch2 data
 
-	LDA #<(_CubicleLoadedMusic+4)
+	CLC
+	LDA LoadedMusic
+	ADC #4
 	STA MusicStart_Ch1
-	LDA #>(_CubicleLoadedMusic+4)
+	LDA LoadedMusic+1
+	ADC #0
 	STA MusicStart_Ch1+1
 
-	LDA #<_CubicleLoadedMusic
 	CLC
-	ADC _CubicleLoadedMusic+2 ;assuming here that the low byte of _CubicleLoadedMusic ptr is 00
+	LDY #2
+	LDA (LoadedMusic), y
+	ADC LoadedMusic
 	STA MusicStart_Ch2
-	LDA #>_CubicleLoadedMusic
-	CLC
-	ADC _CubicleLoadedMusic+3
+	LDY #3
+	LDA (LoadedMusic), y
+	ADC LoadedMusic+1
 	STA MusicStart_Ch2+1
 
-	LDA _CubicleLoadedMusic
+	LDY #0
+	LDA (LoadedMusic), y
 	STA MusicTicksTotal
-	LDA _CubicleLoadedMusic+1
+	LDY #1
+	LDA (LoadedMusic), y
 	STA MusicTicksTotal+1
 
 	STZ MusicTicksLeft
@@ -1697,7 +1708,11 @@ LoadWinScreen:
 
 	JSR _unpack_victory_tile_map
 
-	JSR _unpack_victory_cubicle_music
+	;JSR _unpack_victory_cubicle_music
+	LDA #<_CubicleVictoryMusic
+	STA LoadedMusic
+	LDA #>_CubicleVictoryMusic
+	STA LoadedMusic+1
 	JSR LoadMusicWithoutInflate
 
 	LDY #$E9
@@ -1841,10 +1856,11 @@ InstrumEnv2:
 	.byte $18, $18, $18, $18, $18
 	.byte $88
 
+
 _CubicleMainMusic:
-	.incbin "src/cubicle_bins/cubeknight_alltracks.gtm.deflate"
+	.incbin "src/cubicle_bins/cubeknight_alltracks.gtm"
 _CubicleVictoryMusic:
-	.incbin "src/cubicle_bins/stroll_alltracks.gtm.deflate"	
+	.incbin "src/cubicle_bins/stroll_alltracks.gtm"	
 
 _CubicleMainMap:
 	.incbin "src/cubicle_bins/testmap1_merged.map.deflate"

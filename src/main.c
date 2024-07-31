@@ -32,8 +32,6 @@
 
 #include "gen/assets/music.h"
 
-unsigned char CubicleLoadedMusic; //MUST BE THE FIRST VAR DECLARED, FOR HACKY REASONS
-
 EntityKind entities[ENTITY_TABLE_SIZE];
 PlayerData *player_data;
 EntityData entity_data[ENTITY_TABLE_SIZE];
@@ -55,8 +53,6 @@ ScoreEntry secret_scores[SCORE_ENTRIES];
 unsigned char death_freeze = 0;
 
 LevelData levels[LEVEL_COUNT];
-
-unsigned char extra_buffer_for_cubicle_music[460];
 
 void noop(void) {
   return;
@@ -223,9 +219,9 @@ void (*const update_fns[])(char) = {
 int avhg_main() {
   char i;
 
-  //moved inits to main select
-
-  play_song(&ASSET__music__pressure_mid, REPEAT_LOOP);
+  //moved shared inits to main select
+  init_scores();
+  play_song(&ASSET__music__avhg_mid, REPEAT_LOOP);
 
   change_rom_bank(BANK_PROG0);
 

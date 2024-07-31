@@ -33,8 +33,15 @@ function generateLinkerConfig(assetFolderNames, extra_code_banks) {
         RAM : {
             start : '$200',
             size : '$1D00',
-            define : 'yes'
+            define : 'yes',
+            bank : '0'
         },
+        RAM2 : {
+            start : '$900',
+            size : '$1200',
+            define : 'yes',
+            bank : '1'
+        }
     };
 
     var section_SEGMENTS = {
@@ -51,6 +58,11 @@ function generateLinkerConfig(assetFolderNames, extra_code_banks) {
         },
         BSS : {
             load : 'RAM',
+            type : 'bss',
+            define : 'yes'
+        },
+        BSS2 : {
+            load : 'RAM2',
             type : 'bss',
             define : 'yes'
         },
