@@ -6,6 +6,7 @@
 #include "gt/music.h"
 #include "gt/feature/text/text.h"
 #include "gen/assets/menu.h"
+#include "gen/assets/sfx.h"
 extern void CubicleReset();
 extern int avhg_main();
 char selection = 0;
@@ -43,15 +44,23 @@ int main() {
     {
         update_inputs();
         if(player1_new_buttons & (INPUT_MASK_UP | INPUT_MASK_DOWN)) {
+            play_sound_effect(&ASSET__sfx__ping1_bin, 1);
             flip_pages();
             selection = !selection;
         }
         if(player1_new_buttons & (INPUT_MASK_START | INPUT_MASK_A)) {
+            stop_sound_effects();
             selection |= 2;
         }
         sleep(1);
+        tick_music();
     }
     
+    stop_music();
+    draw_box(1, 1, 127, 126, 32);
+    await_draw_queue();
+    flip_pages();
+
     if(selection & 1) {
         avhg_main();
     } else {

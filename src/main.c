@@ -31,6 +31,7 @@
 #include "levels/level_scores.h"
 
 #include "gen/assets/music.h"
+#include "gen/assets/sfx.h"
 
 EntityKind entities[ENTITY_TABLE_SIZE];
 PlayerData *player_data;
@@ -296,16 +297,19 @@ main_loop:
               case ResultOk:
                 break;
               case ResultFail:
-                play_sound_effect(&ASSET__music__sfx_bin, 2);
+                play_sound_effect(&ASSET__sfx__fail_bin, 2);
                 death_freeze = MAX_DEATH_FREEZE;
                 goto main_loop;
               case ResultWin:
+                play_sound_effect(&ASSET__sfx__win_bin, 2);
                 complete_level();
                 goto main_loop;
               case ResultGetSecret:
+                play_sound_effect(&ASSET__sfx__secret_bin, 2);
                 tilemap_get_secret();
                 break;
               case ResultSecretWin:
+                play_sound_effect(&ASSET__sfx__win_bin, 2);
                 secrets_collected++;
                 complete_level();
                 goto main_loop;

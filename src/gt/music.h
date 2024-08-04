@@ -26,6 +26,8 @@ extern unsigned char audio_amplitudes[NUM_FM_OPS];
 
 void load_instrument(char channel, Instrument* instr);
 
+void stop_sound_effects();
+
 void play_sound_effect(unsigned char* sfx_ptr, char sfx_bank, char priority);
 
 #endif

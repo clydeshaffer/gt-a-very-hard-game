@@ -323,6 +323,10 @@ void stop_music() {
     //flush_audio_params();
 }
 
+void stop_sound_effects() {
+    sound_effect_length = 0;
+}
+
 void play_sound_effect(unsigned char* sfx_ptr, char sfx_bank, char priority) {
     if(priority < sound_effect_priority) return;
     sound_effect_priority = priority;
