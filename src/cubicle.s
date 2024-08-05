@@ -1715,7 +1715,7 @@ LoadWinScreen:
 	STA LoadedMusic+1
 	JSR LoadMusicWithoutInflate
 
-	LDY #$E9
+	LDY #$D9
 	LDX FrameCounter2
 	JSR PutCounter
 	LDX FrameCounter1
