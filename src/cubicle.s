@@ -11,7 +11,6 @@
 .export _CubicleMainMap, _CubicleTitleMap, _CubicleVictoryMap
 .export _CubicleReset, _CubicleACP
 .exportzp _current_tilemap
-.pc02
 
 .zeropage
 temp: .res 16

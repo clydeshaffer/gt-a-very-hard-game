@@ -5,7 +5,7 @@
 ; Startup code for cc65 (GameTank version)
 
 .export   _init, _exit
-.import   _main
+.import   _main, _sdk_init
 
 .export   __STARTUP__ : absolute = 1        ; Mark as startup
 .import   __RAM_START__, __RAM_SIZE__       ; Linker generated
@@ -85,7 +85,8 @@ viaWakeup:
 ; ---------------------------------------------------------------------------
 ; Call main()
 
-          JSR     _main
+          JSR	  _sdk_init
+		  JSR     _main
 
 ; ---------------------------------------------------------------------------
 ; Back from main (this is also the _exit entry):  force a software break

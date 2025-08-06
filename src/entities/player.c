@@ -55,7 +55,7 @@ void draw_player(char ix) {
   vram[GY] = 0;
   vram[WIDTH] = PLAYER_SIZE;
   vram[HEIGHT] = PLAYER_SIZE;
-  vram[COLOR] = ~92;
+  vram[COLOR] = ~60;
   vram[START] = 1;
   wait();
 }
