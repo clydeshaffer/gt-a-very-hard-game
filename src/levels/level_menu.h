@@ -5,6 +5,7 @@
 
 #pragma rodata-name (push, "PROG0")
 
+// replace 5 with 7
 const unsigned char level_menu[TILEMAP_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

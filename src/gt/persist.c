@@ -14,7 +14,6 @@ char executing_from_rom() {
     return __A__ > 0xC0;
 }
 
-
 static char i, k;
 void clear_save_sector() {
     if(executing_from_rom()) {

@@ -152,10 +152,23 @@ void init_level() {
 
 void reset_level() {
   LevelData *l;
+  SecretData *data;
+  char i;
+
   l = &levels[current_level];
 
   reset_player(l->reset_data[0], l->reset_data[1]);
   tilemap_reset_secret();
+
+  // Reset collected secrets
+  for (i = 0; i < ENTITY_TABLE_SIZE; i++) {
+    if (entities[i] == EntitySecret) {
+      data = (SecretData *) &entity_data[i];
+      data->collected = false;
+
+      break;
+    }
+  }
 }
 
 void init_game() {
@@ -278,7 +291,6 @@ int avhg_main() {
   // Run forever
 main_loop:
   while (1) {
-    PROFILER_START(1);
     tick_music();
 
     update_inputs();
@@ -352,7 +364,6 @@ main_loop:
     }
 
     await_draw_queue();
-    PROFILER_END(1);
     sleep(1);
     flip_pages();
   }

@@ -7,8 +7,8 @@
       url = "github:hercules-ci/gitignore.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cc65.url = "github:nickgirardo/nix-cc65-unstable/b6ce9c5b4dfe5622dc9460da673a907326a23f74";
-    GameTankEmulator.url = "github:nickgirardo/nix-GameTankEmulator/12b36c60a5f0da85405b6c02df8b5e911079481d";
+    cc65.url = "github:nickgirardo/nix-cc65-unstable/18b6c7417518c54bb95a2071782f2603d883edc9";
+    GameTankEmulator.url = "github:nickgirardo/nix-GameTankEmulator/38f181cc8053f0843984269d5a808b64d41c5416";
     GTFO.url = "github:nickgirardo/nix-GTFO/e159f175b9ef3c2698f8c81a6843fac2fd3fcef0";
   };
 
@@ -58,11 +58,33 @@
         installPhase = ''
             mkdir -p $out/bin
             cp -r bin $out
+
+            mkdir -p $out/web
+            cp -r web $out
         '';
       };
 
+      # TODO do I need to mark avhg as a dependency?
+      web-emulator = GameTankEmulator.outputs.packages.${system}.gte-web.overrideAttrs (final: prev: {
+        rom = "${avhg}/bin/game.gtr";
+        WEB_SHELL = "${avhg}/web/shell.html";
+        WEB_ASSETS = "${avhg}/web/assets/";
+        WINDOW_TITLE = "A Very Hard Game";
+      });
+
+      web-emulator-embed = GameTankEmulator.outputs.packages.${system}.gte-web.overrideAttrs (final: prev: {
+        rom = "${avhg}/bin/game.gtr";
+        WEB_SHELL = "web/embedded.html";
+      });
     in {
-      packages.${system}.default = avhg;
+      devShells.${system}.default = pkgs.mkShell {
+        buildInputs = [ cc65.outputs.packages.${system}.default pkgs.gnumake pkgs.nodejs pkgs.zip pkgs.zopfli ];
+        CC65_LIB="${cc65.outputs.packages.${system}.default}/share/cc65/lib";
+      };
+      packages.${system} = {
+          inherit avhg web-emulator web-emulator-embed;
+          default = avhg;
+      };
       apps.${system} = let
         emu = pkgs.writeShellApplication {
           name = "emulate";
@@ -72,6 +94,20 @@
         emulate = {
           type = "app";
           program = "${emu}/bin/emulate";
+        };
+        emu-web = pkgs.writeShellApplication {
+          name = "emulate-web";
+          runtimeInputs = [ pkgs.caddy ];
+          text = ''
+            # Takes the port as first argument
+            # Default to port 8080
+            PORT="''${1:-8080}"
+            caddy file-server --listen :"$PORT" --root ${web-emulator.outPath}/dist
+          '';
+        };
+        emulate-web = {
+          type = "app";
+          program = "${emu-web}/bin/emulate-web";
         };
         flash_ = pkgs.writeShellApplication {
           name = "flash";
@@ -89,7 +125,7 @@
           program = "${flash_}/bin/flash";
         };
       in {
-        inherit emulate flash;
+        inherit emulate emulate-web flash;
         default = emulate;
       };
     };
